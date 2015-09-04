@@ -5,10 +5,12 @@ using System.Text;
 
 namespace My_Heartstone_cards
 {
+    [Serializable]
    public class card
     {
 
         public static List<card> cardList = new List<card>();
+        public static List<card> MyCollection = new List<card>();
 
         public string CardId { get; set; }
         public string Name { get; set; }
@@ -25,6 +27,7 @@ namespace My_Heartstone_cards
         public string HowToGetGold { get; set; }
         public string Img { get; set; }
         public string ImgGold { get; set; }
+        public string PlayerClass { get; set; }
         //public mecanics[] Mechanics { get; set; }
 
         /*"cardId": "CS1_042",
