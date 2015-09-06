@@ -16,13 +16,25 @@
         <TextBlock Text="ok" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,684,0,30" Name="TextBlock" Width="1002" TextAlignment="Center" />
         <TextBlock HorizontalAlignment="Right" Margin="0,710,0,-4" Name="textBlock1" Text="%" TextAlignment="Center" VerticalAlignment="Center" Width="1002" Height="23" />
         </Canvas>
-        <ScrollViewer Margin="0,57,0,0">
-        <WrapPanel Margin="0,20,0,0" Name="stackPanel1" Height="653" Width="967" Orientation="Horizontal">
+        <ScrollViewer Margin="0,57,0,0" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <WrapPanel Margin="0,20,0,0" Name="stackPanel1" Height="auto" Width="970" Orientation="Horizontal" IsItemsHost="False">
         </WrapPanel>
         </ScrollViewer>
-        <Button Content="War" Height="23" HorizontalAlignment="Left" Margin="12,28,0,0" Name="button1" VerticalAlignment="Top" Width="75" Click="button1_Click" Tag="Warrior" />
-        <Button Content="War" Height="23" HorizontalAlignment="Right" Margin="0,28,834,0" Name="button2" VerticalAlignment="Top" Width="75" Click="button1_Click" Tag="Druid" />
-        <Button Content="War" Height="23" Margin="174,28,0,0" Name="button3" VerticalAlignment="Top" Click="button1_Click" Tag="Priest" HorizontalAlignment="Left" Width="75" />
-        <Button Content="War" Height="23" HorizontalAlignment="Left" Margin="255,28,0,0" Name="button4" VerticalAlignment="Top" Width="75" Click="button1_Click" Tag="Mage" />
+        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="12,28,0,0" Name="button1" VerticalAlignment="Top" Width="25" Click="button1_Click" Tag="Warrior" />
+        <Button Content="War" Height="25" Margin="43,28,0,0" Name="button2" VerticalAlignment="Top" Click="button1_Click" Tag="Druid" HorizontalAlignment="Left" Width="25" />
+        <Button Content="War" Height="25" Margin="74,28,0,0" Name="button3" VerticalAlignment="Top" Click="button1_Click" Tag="Priest" HorizontalAlignment="Left" Width="25" />
+        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="105,28,0,0" Name="button4" VerticalAlignment="Top" Width="25" Click="button1_Click" Tag="Mage" />
+        <Button Content="War" Height="25" Margin="136,28,0,0" Name="button5" Tag="Rogue" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Click="button1_Click" />
+        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="167,28,0,0" Name="button6" Tag="Demonist" VerticalAlignment="Top" Width="25" Click="button1_Click" />
+        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="198,28,0,0" Name="button7" Tag="Shaman" VerticalAlignment="Top" Width="25" Click="button1_Click" />
+        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="229,28,0,0" Name="button8" Tag="Hunter" VerticalAlignment="Top" Width="25" Click="button1_Click" />
+        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="260,28,0,0" Name="button9" Tag="Paladin" VerticalAlignment="Top" Width="25" Click="button1_Click" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="325,30,0,0" Name="comboBox1" VerticalAlignment="Top" Width="84">
+            <ComboBoxItem Content="Free" />
+            <ComboBoxItem Content="Common" />
+            <ComboBoxItem Content="Rare" />
+            <ComboBoxItem Content="Epic" />
+            <ComboBoxItem Content="Legendary" />
+        </ComboBox>
     </Grid>
 </Window>

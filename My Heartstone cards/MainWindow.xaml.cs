@@ -20,17 +20,17 @@ namespace My_Heartstone_cards
     public partial class MainWindow : Window
     {
         
-        const string cardPath = "Cards/";
-        const string myDecksPath = "MyDecks/";
+        const string cardPath = "";
+        const string myDecksPath = "MyDecks\\";
 
         public MainWindow()
         {
             InitializeComponent();
-            if (System.IO.Directory.Exists(cardPath) == false)
-            {
-                System.IO.Directory.CreateDirectory(cardPath);
-            }
-            if (System.IO.File.Exists("cardList") == false)
+            //if (System.IO.Directory.Exists(cardPath) == false)
+            //{
+            //    System.IO.Directory.CreateDirectory(cardPath);
+            //}
+            if (System.IO.File.Exists(cardPath + "cardList") == false)
             {
                 DownloadAllCardSet();
             }
@@ -39,7 +39,7 @@ namespace My_Heartstone_cards
                 try
                 {
                     System.Runtime.Serialization.Formatters.Binary.BinaryFormatter reader = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    System.IO.FileStream file = System.IO.File.OpenRead("cardList");
+                    System.IO.FileStream file = System.IO.File.OpenRead(cardPath +"cardList");
                     card.cardList = (List<card>)reader.Deserialize(file);
                     file.Close();
                 }
@@ -88,20 +88,20 @@ namespace My_Heartstone_cards
         {
             //System.Net.WebClient http = new System.Net.WebClient();
             //int i = 0;
-            //foreach (card item in card.cardList)
-            //{
-            //    http.DownloadFile(item.Img, item.CardId);
-            //    http.DownloadFile(item.ImgGold, item.CardId + "g");
-            //    item.Img = item.CardId;
-            //    item.Img = item.CardId + "g";
+            foreach (card item in card.cardList)
+            {
+            //    http.DownloadFile(item.Img, cardPath + item.CardId);
+            //    http.DownloadFile(item.ImgGold, cardPath + item.CardId + "g");
+                item.Img = cardPath + item.CardId;
+                item.ImgGold = cardPath + item.CardId + "g";
             //    i++;
             //    (sender as System.ComponentModel.BackgroundWorker).ReportProgress(i);
 
-            //}
+            }
             //http.Dispose();
 
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter writer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            System.IO.FileStream file = System.IO.File.Create("cardList");
+            System.IO.FileStream file = System.IO.File.Create(cardPath + "cardList");
             writer.Serialize(file, card.cardList);
             file.Close();
             Loading.Visibility = Visibility.Hidden;
@@ -148,18 +148,23 @@ namespace My_Heartstone_cards
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            foreach (card item in card.cardList.FindAll(c => c.PlayerClass == ((Button)sender).Tag.ToString()))
+            clearPanel();
+            foreach (card item in card.cardList.FindAll(c => c.PlayerClass == ((Button)sender).Tag.ToString() && c.Rarity == comboBox1.Text))
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                bitmap.UriSource = new Uri(item.Img);
+                bitmap.UriSource = new Uri(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
                 bitmap.EndInit();
-                Image oneCard = new Image() { Width = 100, Height = 100 };
+                Image oneCard = new Image() { Width = 307, Height = 465 };
                 oneCard.Source = bitmap;
                 stackPanel1.Children.Add(oneCard);
             }
         }
 
+        private void clearPanel()
+        {
+            stackPanel1.Children.Clear();
+        }
 
     }
 }
