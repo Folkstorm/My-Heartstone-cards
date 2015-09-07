@@ -18,23 +18,39 @@
         </Canvas>
         <ScrollViewer Margin="0,57,0,0" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
         <WrapPanel Margin="0,20,0,0" Name="stackPanel1" Height="auto" Width="970" Orientation="Horizontal" IsItemsHost="False">
-        </WrapPanel>
+            </WrapPanel>
         </ScrollViewer>
-        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="12,28,0,0" Name="button1" VerticalAlignment="Top" Width="25" Click="button1_Click" Tag="Warrior" />
-        <Button Content="War" Height="25" Margin="43,28,0,0" Name="button2" VerticalAlignment="Top" Click="button1_Click" Tag="Druid" HorizontalAlignment="Left" Width="25" />
-        <Button Content="War" Height="25" Margin="74,28,0,0" Name="button3" VerticalAlignment="Top" Click="button1_Click" Tag="Priest" HorizontalAlignment="Left" Width="25" />
-        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="105,28,0,0" Name="button4" VerticalAlignment="Top" Width="25" Click="button1_Click" Tag="Mage" />
-        <Button Content="War" Height="25" Margin="136,28,0,0" Name="button5" Tag="Rogue" VerticalAlignment="Top" HorizontalAlignment="Left" Width="25" Click="button1_Click" />
-        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="167,28,0,0" Name="button6" Tag="Demonist" VerticalAlignment="Top" Width="25" Click="button1_Click" />
-        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="198,28,0,0" Name="button7" Tag="Shaman" VerticalAlignment="Top" Width="25" Click="button1_Click" />
-        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="229,28,0,0" Name="button8" Tag="Hunter" VerticalAlignment="Top" Width="25" Click="button1_Click" />
-        <Button Content="War" Height="25" HorizontalAlignment="Left" Margin="260,28,0,0" Name="button9" Tag="Paladin" VerticalAlignment="Top" Width="25" Click="button1_Click" />
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="325,30,0,0" Name="comboBox1" VerticalAlignment="Top" Width="84">
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="16,30,0,0" Name="PlayerClass" VerticalAlignment="Top" Width="90">
+            <ComboBoxItem Content="Warrior" />
+            <ComboBoxItem Content="Druid" />
+            <ComboBoxItem Content="Priest" />
+            <ComboBoxItem Content="Mage" />
+            <ComboBoxItem Content="Rogue" />
+            <ComboBoxItem Content="Warlock" />
+            <ComboBoxItem Content="Shaman" />
+            <ComboBoxItem Content="Hunter" />
+            <ComboBoxItem Content="Paladin" />
+            <ComboBoxItem Content="Neutral" />
+        </ComboBox>
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="142,30,0,0" Name="Rarity" VerticalAlignment="Top" Width="90">
+            <ComboBoxItem Content="All" />
             <ComboBoxItem Content="Free" />
             <ComboBoxItem Content="Common" />
             <ComboBoxItem Content="Rare" />
             <ComboBoxItem Content="Epic" />
             <ComboBoxItem Content="Legendary" />
         </ComboBox>
+        <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,30,631,0" Name="CardSet" VerticalAlignment="Top" Width="90">
+            <ComboBoxItem Content="All" />
+            <ComboBoxItem Content="Basic" />
+            <ComboBoxItem Content="Classic" />
+            <ComboBoxItem Content="Naxxramas" />
+            <ComboBoxItem Content="Goblins vs Gnomes" />
+            <ComboBoxItem Content="Reward" />
+            <ComboBoxItem Content="Blackrock Mountain" />
+            <ComboBoxItem Content="The Grand Tournament" />
+        </ComboBox>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="406,28,0,0" Name="Search" VerticalAlignment="Top" Width="120" />
+        <Button Content="Search" Height="23" HorizontalAlignment="Left" Margin="573,28,0,0" Name="button10" VerticalAlignment="Top" Width="75" Click="button10_Click" />
     </Grid>
 </Window>

@@ -94,6 +94,10 @@ namespace My_Heartstone_cards
             //    http.DownloadFile(item.ImgGold, cardPath + item.CardId + "g");
                 item.Img = cardPath + item.CardId;
                 item.ImgGold = cardPath + item.CardId + "g";
+                if (item.PlayerClass == null)
+                {
+                    item.PlayerClass = "Neutral";
+                }
             //    i++;
             //    (sender as System.ComponentModel.BackgroundWorker).ReportProgress(i);
 
@@ -146,24 +150,58 @@ namespace My_Heartstone_cards
             //}
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void clearPanel()
+        {
+            stackPanel1.Children.Clear();
+        }
+
+        private void button10_Click(object sender, RoutedEventArgs e)
         {
             clearPanel();
-            foreach (card item in card.cardList.FindAll(c => c.PlayerClass == ((Button)sender).Tag.ToString() && c.Rarity == comboBox1.Text))
+
+            string PlayerClassFilter;
+            string RarityFilter;
+            string SearchFilter;
+            string CardSetFilter;
+
+            if (PlayerClass.Text == "All")
+            {
+                PlayerClassFilter = "";
+            }
+            else
+            {
+                PlayerClassFilter = PlayerClass.Text;
+            }
+
+            if (Rarity.Text == "All")
+            {
+                RarityFilter = "";
+            }
+            else
+            {
+                RarityFilter = Rarity.Text;
+            }
+
+            if (CardSet.Text == "All")
+            {
+                CardSetFilter = "";
+            }
+            else
+            {
+                CardSetFilter = CardSet.Text;
+            }
+
+            foreach (card item in card.cardList.FindAll(c => c.PlayerClass.Contains(PlayerClassFilter) && c.Rarity.Contains(RarityFilter) && c.CardSet.Contains(CardSetFilter) && c.Name.Contains(Search.Text)))
             {
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
                 bitmap.EndInit();
-                Image oneCard = new Image() { Width = 307, Height = 465 };
+                //Image oneCard = new Image() { Width = 307, Height = 465 };
+                Image oneCard = new Image() { Width = 50, Height = 75 };
                 oneCard.Source = bitmap;
                 stackPanel1.Children.Add(oneCard);
             }
-        }
-
-        private void clearPanel()
-        {
-            stackPanel1.Children.Clear();
         }
 
     }
