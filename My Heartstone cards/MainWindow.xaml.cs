@@ -86,29 +86,28 @@ namespace My_Heartstone_cards
 
         void worker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            //System.Net.WebClient http = new System.Net.WebClient();
-            //int i = 0;
+            System.Net.WebClient http = new System.Net.WebClient();
+            int i = 0;
             foreach (card item in card.cardList)
             {
-            //    http.DownloadFile(item.Img, cardPath + item.CardId);
-            //    http.DownloadFile(item.ImgGold, cardPath + item.CardId + "g");
+                http.DownloadFile(item.Img, cardPath + item.CardId);
+                http.DownloadFile(item.ImgGold, cardPath + item.CardId + "g");
                 item.Img = cardPath + item.CardId;
                 item.ImgGold = cardPath + item.CardId + "g";
                 if (item.PlayerClass == null)
                 {
                     item.PlayerClass = "Neutral";
                 }
-            //    i++;
-            //    (sender as System.ComponentModel.BackgroundWorker).ReportProgress(i);
+                i++;
+                (sender as System.ComponentModel.BackgroundWorker).ReportProgress(i);
 
             }
-            //http.Dispose();
+            http.Dispose();
 
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter writer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             System.IO.FileStream file = System.IO.File.Create(cardPath + "cardList");
             writer.Serialize(file, card.cardList);
             file.Close();
-            Loading.Visibility = Visibility.Hidden;
         }
 
         void worker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
@@ -116,6 +115,10 @@ namespace My_Heartstone_cards
             progressBar1.Value = e.ProgressPercentage;
             TextBlock.Text = "Downloading " + card.cardList[e.ProgressPercentage-1].Name;
             textBlock1.Text = e.ProgressPercentage.ToString() + " / " + card.cardList.Count;
+            if (e.ProgressPercentage == card.cardList.Count)
+            {
+                Loading.Visibility = Visibility.Hidden;
+            }
         }
 
 
@@ -134,20 +137,6 @@ namespace My_Heartstone_cards
             var response = http.DownloadString(request);
             http.Dispose();
             return response;
-        }
-
-        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
-        {
-            //foreach (card item in card.cardList)
-            //{
-            //BitmapImage bitmap = new BitmapImage();
-            //bitmap.BeginInit();
-            //bitmap.UriSource = new Uri(item.Img);
-            //bitmap.EndInit();
-            //Image oneCard = new Image() { Width = 100, Height = 100 };
-            //oneCard.Source = bitmap;
-            //stackPanel1.Children.Add(oneCard);
-            //}
         }
 
         private void clearPanel()
