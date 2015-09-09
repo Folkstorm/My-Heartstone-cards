@@ -157,6 +157,11 @@ namespace My_Heartstone_cards
 
         private void button10_Click(object sender, RoutedEventArgs e)
         {
+            NewMethod();
+        }
+
+        private void NewMethod()
+        {
             clearPanel();
 
             string PlayerClassFilter;
@@ -191,17 +196,55 @@ namespace My_Heartstone_cards
                 CardSetFilter = CardSet.Text;
             }
 
-            foreach (card item in card.cardList.FindAll(c => c.PlayerClass.Contains(PlayerClassFilter) && c.Rarity.Contains(RarityFilter) && c.CardSet.Contains(CardSetFilter) && c.Name.Contains(Search.Text)))
+            foreach (card item in card.cardList.FindAll(c => c.PlayerClass.Contains(PlayerClassFilter) && c.Rarity.Contains(RarityFilter) && c.CardSet.Contains(CardSetFilter) && c.Name.ToLower().Contains(Search.Text.ToLower())))
             {
-                BitmapImage bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
-                bitmap.EndInit();
-                //Image oneCard = new Image() { Width = 307, Height = 465 };
-                Image oneCard = new Image() { Width = 50, Height = 75 };
-                oneCard.Source = bitmap;
+
+                //BitmapImage bitmap = new BitmapImage();
+                //bitmap.BeginInit();
+                //bitmap.UriSource = new Uri(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
+                //bitmap.EndInit();
+                Image oneCard = new Image() { Width = 307, Height = 465 };
+                //Image oneCard = new Image() { Width = 50, Height = 75 };
+                //oneCard.Stretch = Stretch.Fill;
+                oneCard.MouseLeftButtonDown += new MouseButtonEventHandler(oneCard_MouseLeftButtonDown);
+                oneCard.MouseRightButtonDown += new MouseButtonEventHandler(oneCard_MouseRightButtonDown);
+                oneCard.Tag = item;
+
+                System.Drawing.Bitmap image = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
+                System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(image);
+                //g.CopyFromScreen(MainWindow.Left + posNow.X + 5, MainWindow.Top + posNow.Y + 28, 0, 0, New System.Drawing.Size(200, 200), System.Drawing.CopyPixelOperation.SourceCopy)
+                g.DrawString(getNumberOfCardInCollection(item.CardId).ToString(), new System.Drawing.Font("Times New Roman", 20), System.Drawing.Brushes.Black, new System.Drawing.PointF(150, 430));
+                System.Windows.Media.ImageSource imgsrc = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(image.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                //'image.Save("C:\Users\x\Desktop\a delete\test.png")
+                oneCard.Source = imgsrc;
+                image.Dispose();
+                g.Dispose();
+                //oneCard.Source = bitmap;
                 stackPanel1.Children.Add(oneCard);
             }
+        }
+
+        void oneCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (getNumberOfCardInCollection(((card)((Image)sender).Tag).CardId) < 2)
+            {
+                card.MyCollection.Add((card)((Image)sender).Tag);
+                NewMethod();
+            }
+        }
+
+        void oneCard_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (getNumberOfCardInCollection(((card)((Image)sender).Tag).CardId) > 0)
+            {
+                card.MyCollection.Remove((card)((Image)sender).Tag);
+                NewMethod();
+            }
+        }
+
+        int getNumberOfCardInCollection(string CardId)
+        {
+            return card.MyCollection.FindAll(c => c.CardId == CardId).Count;
         }
 
     }

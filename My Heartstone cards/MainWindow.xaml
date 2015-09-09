@@ -21,6 +21,7 @@
             </WrapPanel>
         </ScrollViewer>
         <ComboBox Height="23" HorizontalAlignment="Left" Margin="16,30,0,0" Name="PlayerClass" VerticalAlignment="Top" Width="90">
+            <ComboBoxItem Content="All" />
             <ComboBoxItem Content="Warrior" />
             <ComboBoxItem Content="Druid" />
             <ComboBoxItem Content="Priest" />
