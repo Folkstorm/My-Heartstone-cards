@@ -50,16 +50,18 @@ namespace My_Heartstone_cards
                 }
                 
             }
+            if (System.IO.File.Exists(cardPath + "cardCollection") == true)
+            {
+                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter reader = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                System.IO.FileStream file = System.IO.File.OpenRead(cardPath + "cardCollection");
+                card.MyCollection = (List<card>)reader.Deserialize(file);
+                file.Close();
+            }
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             DownloadAllCardSet();
-            //BitmapImage bitmap = new BitmapImage();
-            //bitmap.BeginInit();
-            //bitmap.UriSource = new Uri(card.cardList[100].Img);
-            //bitmap.EndInit();
-            //imageCard.Source = bitmap;
          }
 
         private void DownloadAllCardSet()
@@ -102,6 +104,7 @@ namespace My_Heartstone_cards
                 (sender as System.ComponentModel.BackgroundWorker).ReportProgress(i);
 
             }
+            card.cardList.RemoveAll(c => c.Type == "Hero");
             http.Dispose();
 
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter writer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
@@ -125,7 +128,6 @@ namespace My_Heartstone_cards
         private void DownloadCardSet(string set)
         {
             string response = APIRequest("https://omgvamp-hearthstone-v1.p.mashape.com/cards/sets/" + set + "?collectible=1&locale=frFR");
-            //System.IO.File.WriteAllText("sets/" + set, response);
             object cards = Newtonsoft.Json.JsonConvert.DeserializeObject(response, typeof(List<card>));
             card.cardList.AddRange((List<card>)cards);
         }
@@ -146,10 +148,10 @@ namespace My_Heartstone_cards
 
         private void button10_Click(object sender, RoutedEventArgs e)
         {
-            NewMethod();
+            SearchAndShow();
         }
 
-        private void NewMethod()
+        private void SearchAndShow()
         {
             clearPanel();
 
@@ -185,55 +187,106 @@ namespace My_Heartstone_cards
                 CardSetFilter = CardSet.Text;
             }
 
-            foreach (card item in card.cardList.FindAll(c => c.PlayerClass.Contains(PlayerClassFilter) && c.Rarity.Contains(RarityFilter) && c.CardSet.Contains(CardSetFilter) && c.Name.ToLower().Contains(Search.Text.ToLower())))
+            foreach (card item in card.cardList.FindAll(c => 
+                c.PlayerClass.Contains(PlayerClassFilter) && 
+                c.Rarity.Contains(RarityFilter) && 
+                c.CardSet.Contains(CardSetFilter) && 
+                c.Name.ToLower().Contains(Search.Text.ToLower()) &&
+                int.Parse(c.Cost) >= int.Parse(ManaMin.Text) &&
+                int.Parse(c.Cost) <= int.Parse(ManaMax.Text)
+                ))
             {
 
-                //BitmapImage bitmap = new BitmapImage();
-                //bitmap.BeginInit();
-                //bitmap.UriSource = new Uri(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
-                //bitmap.EndInit();
-                Image oneCard = new Image() { Width = 307, Height = 465 };
-                //Image oneCard = new Image() { Width = 50, Height = 75 };
-                //oneCard.Stretch = Stretch.Fill;
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
+                bitmap.EndInit();
+                CardImage oneCard = new CardImage();// { Width = 307, Height = 465 };
                 oneCard.MouseLeftButtonDown += new MouseButtonEventHandler(oneCard_MouseLeftButtonDown);
                 oneCard.MouseRightButtonDown += new MouseButtonEventHandler(oneCard_MouseRightButtonDown);
+                oneCard.MouseEnter += new MouseEventHandler(oneCard_MouseEnter);
+                oneCard.MouseLeave += new MouseEventHandler(oneCard_MouseLeave); 
                 oneCard.Tag = item;
-
-                System.Drawing.Bitmap image = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(System.AppDomain.CurrentDomain.BaseDirectory + item.Img);
-                System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(image);
-                //g.CopyFromScreen(MainWindow.Left + posNow.X + 5, MainWindow.Top + posNow.Y + 28, 0, 0, New System.Drawing.Size(200, 200), System.Drawing.CopyPixelOperation.SourceCopy)
-                g.DrawString(getNumberOfCardInCollection(item.CardId).ToString(), new System.Drawing.Font("Times New Roman", 20), System.Drawing.Brushes.Black, new System.Drawing.PointF(150, 430));
-                System.Windows.Media.ImageSource imgsrc = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(image.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                //'image.Save("C:\Users\x\Desktop\a delete\test.png")
-                oneCard.Source = imgsrc;
-                image.Dispose();
-                g.Dispose();
-                //oneCard.Source = bitmap;
+                oneCard.image1.Source = bitmap;
+                oneCard.label1.Content = getNumberOfCardInCollection(item.CardId).ToString();
                 stackPanel1.Children.Add(oneCard);
             }
         }
 
+        
+
+        
+
         void oneCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (getNumberOfCardInCollection(((card)((Image)sender).Tag).CardId) < 2)
+            int numberOfCard = getNumberOfCardInCollection(((card)((CardImage)sender).Tag).CardId);
+            if (numberOfCard < 2)
             {
-                card.MyCollection.Add((card)((Image)sender).Tag);
-                NewMethod();
+
+                if (numberOfCard == 1 && ((card)((CardImage)sender).Tag).Rarity == "Legendary")
+                    return;
+
+                card.MyCollection.Add((card)((CardImage)sender).Tag);
+                SearchAndShow();
             }
         }
 
         void oneCard_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (getNumberOfCardInCollection(((card)((Image)sender).Tag).CardId) > 0)
+            if (getNumberOfCardInCollection(((card)((CardImage)sender).Tag).CardId) > 0)
             {
-                card.MyCollection.Remove((card)((Image)sender).Tag);
-                NewMethod();
+                card.MyCollection.Remove((card)((CardImage)sender).Tag);
+                SearchAndShow();
             }
+        }       
+
+        void oneCard_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ((CardImage)sender).Background = Brushes.PaleGoldenrod;
+        }
+
+        void oneCard_MouseLeave(object sender, MouseEventArgs e)
+        {
+            ((CardImage)sender).Background = null;
         }
 
         int getNumberOfCardInCollection(string CardId)
         {
             return card.MyCollection.FindAll(c => c.CardId == CardId).Count;
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter writer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            System.IO.FileStream file = System.IO.File.Create(cardPath + "cardCollection");
+            writer.Serialize(file, card.MyCollection);
+            file.Close();
+        }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            List<card> MissingCards = new List<card>();
+
+            foreach (card item in card.cardList)
+            {
+                int numberOfCard = getNumberOfCardInCollection(item.CardId);
+                int numberToHave;
+                if (item.Rarity == "Legendary")
+                {
+                    numberToHave = 1;
+                }
+                else
+                {
+                    numberToHave = 2;
+                }
+
+                for (int i = 0; i < numberToHave - numberOfCard; i++)
+                {
+                    MissingCards.Add(item);
+                }
+
+            }
+
         }
 
     }

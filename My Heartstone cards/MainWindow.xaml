@@ -7,9 +7,13 @@
             <MenuItem Header="Option">
                 <MenuItem Header="Download the database" Click="MenuItem_Click" />
             </MenuItem>
-            <MenuItem Header="My collection" Click="MenuItem_Click_1" />
+            <MenuItem Header="My collection">
+            <MenuItem Header="Save" Click="MenuItem_Click_1" />
+            </MenuItem>
             <MenuItem Header="My Decks"/>
-            <MenuItem Header="Stats"/>
+            <MenuItem Header="Stats">
+                <MenuItem Header="What should I buy" Click="MenuItem_Click_2" />
+            </MenuItem>
         </Menu>
         <Canvas Name="Loading" Visibility="Hidden">
         <ProgressBar Height="23" Margin="0,705,0,0" Name="progressBar1" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
@@ -20,7 +24,7 @@
         <WrapPanel Margin="0,20,0,0" Name="stackPanel1" Height="auto" Width="970" Orientation="Horizontal" IsItemsHost="False">
             </WrapPanel>
         </ScrollViewer>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="16,30,0,0" Name="PlayerClass" VerticalAlignment="Top" Width="90">
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="16,30,0,0" Name="PlayerClass" VerticalAlignment="Top" Width="90" SelectedIndex="0">
             <ComboBoxItem Content="All" />
             <ComboBoxItem Content="Warrior" />
             <ComboBoxItem Content="Druid" />
@@ -33,7 +37,7 @@
             <ComboBoxItem Content="Paladin" />
             <ComboBoxItem Content="Neutral" />
         </ComboBox>
-        <ComboBox Height="23" HorizontalAlignment="Left" Margin="142,30,0,0" Name="Rarity" VerticalAlignment="Top" Width="90">
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="142,30,0,0" Name="Rarity" VerticalAlignment="Top" Width="90" SelectedIndex="0">
             <ComboBoxItem Content="All" />
             <ComboBoxItem Content="Free" />
             <ComboBoxItem Content="Common" />
@@ -41,7 +45,7 @@
             <ComboBoxItem Content="Epic" />
             <ComboBoxItem Content="Legendary" />
         </ComboBox>
-        <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,30,631,0" Name="CardSet" VerticalAlignment="Top" Width="90">
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="281,30,0,0" Name="CardSet" VerticalAlignment="Top" Width="90" SelectedIndex="0">
             <ComboBoxItem Content="All" />
             <ComboBoxItem Content="Basic" />
             <ComboBoxItem Content="Classic" />
@@ -51,7 +55,9 @@
             <ComboBoxItem Content="Blackrock Mountain" />
             <ComboBoxItem Content="The Grand Tournament" />
         </ComboBox>
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="406,28,0,0" Name="Search" VerticalAlignment="Top" Width="120" />
-        <Button Content="Search" Height="23" HorizontalAlignment="Left" Margin="573,28,0,0" Name="button10" VerticalAlignment="Top" Width="75" Click="button10_Click" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="509,30,0,0" Name="Search" VerticalAlignment="Top" Width="120" />
+        <Button Content="Search" Height="23" HorizontalAlignment="Left" Margin="911,30,0,0" Name="button10" VerticalAlignment="Top" Width="75" Click="button10_Click" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="392,30,0,0" Name="ManaMin" VerticalAlignment="Top" Width="33" Text="0" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="440,29,0,0" Name="ManaMax" VerticalAlignment="Top" Width="33" Text="10" />
     </Grid>
 </Window>
