@@ -19,7 +19,7 @@ namespace My_Heartstone_cards
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+
         const string cardPath = "";
         const string myDecksPath = "MyDecks\\";
 
@@ -39,7 +39,7 @@ namespace My_Heartstone_cards
                 try
                 {
                     System.Runtime.Serialization.Formatters.Binary.BinaryFormatter reader = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    System.IO.FileStream file = System.IO.File.OpenRead(cardPath +"cardList");
+                    System.IO.FileStream file = System.IO.File.OpenRead(cardPath + "cardList");
                     card.cardList = (List<card>)reader.Deserialize(file);
                     file.Close();
                 }
@@ -48,7 +48,7 @@ namespace My_Heartstone_cards
                     MessageBox.Show("Your card database seems to be corrupted, we will redownload it");
                     DownloadAllCardSet();
                 }
-                
+
             }
             if (System.IO.File.Exists(cardPath + "cardCollection") == true)
             {
@@ -62,7 +62,7 @@ namespace My_Heartstone_cards
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             DownloadAllCardSet();
-         }
+        }
 
         private void DownloadAllCardSet()
         {
@@ -72,7 +72,7 @@ namespace My_Heartstone_cards
             worker.DoWork += worker_DoWork;
             worker.ProgressChanged += worker_ProgressChanged;
 
-            
+
 
             DownloadCardSet("Basic");
             DownloadCardSet("Classic");
@@ -116,7 +116,7 @@ namespace My_Heartstone_cards
         void worker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
         {
             progressBar1.Value = e.ProgressPercentage;
-            TextBlock.Text = "Downloading " + card.cardList[e.ProgressPercentage-1].Name;
+            TextBlock.Text = "Downloading " + card.cardList[e.ProgressPercentage - 1].Name;
             textBlock1.Text = e.ProgressPercentage.ToString() + " / " + card.cardList.Count;
             if (e.ProgressPercentage == card.cardList.Count)
             {
@@ -187,10 +187,10 @@ namespace My_Heartstone_cards
                 CardSetFilter = CardSet.Text;
             }
 
-            foreach (card item in card.cardList.FindAll(c => 
-                c.PlayerClass.Contains(PlayerClassFilter) && 
-                c.Rarity.Contains(RarityFilter) && 
-                c.CardSet.Contains(CardSetFilter) && 
+            foreach (card item in card.cardList.FindAll(c =>
+                c.PlayerClass.Contains(PlayerClassFilter) &&
+                c.Rarity.Contains(RarityFilter) &&
+                c.CardSet.Contains(CardSetFilter) &&
                 c.Name.ToLower().Contains(Search.Text.ToLower()) &&
                 int.Parse(c.Cost) >= int.Parse(ManaMin.Text) &&
                 int.Parse(c.Cost) <= int.Parse(ManaMax.Text)
@@ -205,7 +205,7 @@ namespace My_Heartstone_cards
                 oneCard.MouseLeftButtonDown += new MouseButtonEventHandler(oneCard_MouseLeftButtonDown);
                 oneCard.MouseRightButtonDown += new MouseButtonEventHandler(oneCard_MouseRightButtonDown);
                 oneCard.MouseEnter += new MouseEventHandler(oneCard_MouseEnter);
-                oneCard.MouseLeave += new MouseEventHandler(oneCard_MouseLeave); 
+                oneCard.MouseLeave += new MouseEventHandler(oneCard_MouseLeave);
                 oneCard.Tag = item;
                 oneCard.image1.Source = bitmap;
                 oneCard.label1.Content = getNumberOfCardInCollection(item.CardId).ToString();
@@ -213,9 +213,9 @@ namespace My_Heartstone_cards
             }
         }
 
-        
 
-        
+
+
 
         void oneCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -238,7 +238,7 @@ namespace My_Heartstone_cards
                 card.MyCollection.Remove((card)((CardImage)sender).Tag);
                 SearchAndShow();
             }
-        }       
+        }
 
         void oneCard_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -286,6 +286,56 @@ namespace My_Heartstone_cards
                 }
 
             }
+
+            int missingDust = 0;
+
+            int missingDustClassic = 0;
+            int missingDustGvG = 0;
+            int missingDustTgT = 0;
+
+            unsafe
+            {
+                int* dust = null;
+
+                foreach (card item in MissingCards.FindAll(c => c.CardSet == "Classic" || c.CardSet == "Goblins vs Gnomes" || c.CardSet == "The Grand Tournament"))
+                {
+
+                    switch (item.CardSet)
+                    {
+                        case "Classic":
+                            dust = &missingDustClassic;
+                            break;
+                        case "Goblins vs Gnomes":
+                            dust = &missingDustGvG;
+                            break;
+                        case "The Grand Tournament":
+                            dust = &missingDustTgT;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    switch (item.Rarity)
+                    {
+                        case "Common":
+                            *dust += 40;
+                            break;
+                        case "Rare":
+                            *dust += 100;
+                            break;
+                        case "Epic":
+                            *dust += 400;
+                            break;
+                        case "Legendary":
+                            *dust += 1600;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            missingDust = missingDustClassic + missingDustGvG + missingDustTgT;
+            MessageBox.Show(missingDust.ToString());
 
         }
 
